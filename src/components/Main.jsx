@@ -27,18 +27,18 @@ const Main = () => {
       
       <div className='w-full h-full'>
         <div className='absolute w-full h-[550px] bg-gradient-to-r from-black '></div>
-        <img className='w-full h-full object-cover ' src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`} alt={movie?.title} />
+        <img className='w-full h-[500px] md:w-full md:h-full object-cover ' src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`} alt={movie?.title} />
       </div>
       
       <div className='absolute w-full top-[30%] p-4 md:p-8'>
         <h1 className='text-3xl md:text-5xl font-bold max-w-[550px]'>{movie?.title}</h1>
         <div className='flex space-x-4  my-4'>
-         <button className='text-white border-2 border-white-600 rounded-xl pr-5 pl-5 py-1 pb-1 hover:text-gray-950 hover:bg-white ' >Play Now</button>
-         <button className='text-gray-900 bg-white rounded-xl pr-5 ml-4 pl-5 py-1 pb-1 hover:text-white hover:bg-transparent hover:border-white hover:border-2' >Add to Watchlist</button>
+         <button className='text-white border-2 text-sm md:text-base border-white-600 rounded-xl pr-5 pl-5 py-1 pb-1 hover:text-gray-950 hover:bg-white ' >Learn More...</button>
+         <button className='text-gray-900 bg-white text-sm md:text-base rounded-xl pr-5 ml-4 pl-5 py-1 pb-1 hover:text-white hover:bg-transparent hover:border-white hover:border-2' >Add to Watchlist</button>
         </div>
 
         <p className='text-gray-400 text-sm'  >Released | <span>{movie?.release_date}</span></p>
-        <p className="my-4 w-full md:max-w-[80%] lg:max-w-[50%] xl:max-w-[35%] text-gray-200">{overviewTruncate(movie?.overview, 180)}</p>
+        <p className="my-4 w-full text-[14px] md:text-base max-w-[400px] md:max-w-[80%] lg:max-w-[50%] xl:max-w-[60%] text-gray-200">{overviewTruncate(movie?.overview, 180)}</p>
       </div>
 
       

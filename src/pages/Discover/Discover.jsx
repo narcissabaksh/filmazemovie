@@ -3,11 +3,16 @@ import axios from 'axios';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Pagination from './Pagination.jsx';
 import { Link } from 'react-router-dom';
+import { UserAuth } from '../../context/AuthContext';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 function Discover() {
+  const { user } = UserAuth();
+  const movieID = doc(db, 'users', `${user?.email}`);
+  const [likedMovies, setLikedMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [like, setLike] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(10);
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -66,17 +71,38 @@ function Discover() {
   // Pagination logic
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  // Toggle burger menu
+  const toggleBurgerMenu = () => {
+    setIsBurgerMenuOpen(!isBurgerMenuOpen);
+  };
+
+  const saveShow = async (item) => {
+    if (user?.email) {
+      const isLiked = likedMovies.some((movie) => movie.id === item.id);
+      if (!isLiked) {
+        setLikedMovies([...likedMovies, { id: item.id, title: item.title, img: item.backdrop_path }]);
+        await updateDoc(movieID, {
+          savedShows: arrayUnion({
+            id: item.id,
+            title: item.title,
+            img: item.backdrop_path,
+          }),
+        });
+      } else {
+        const updatedLikedMovies = likedMovies.filter((movie) => movie.id !== item.id);
+        setLikedMovies(updatedLikedMovies);
+      }
+    } else {
+      alert('Please log in to save a movie');
+    }
+  };
+
   // Current page's last movie index
   const indexOfLastPost = currentPage * postsPerPage;
   // Current page's first movie index
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   // Get current page's movies
   const currentPosts = movies.slice(indexOfFirstPost, indexOfLastPost);
-
-  // Toggle burger menu
-  const toggleBurgerMenu = () => {
-    setIsBurgerMenuOpen(!isBurgerMenuOpen);
-  };
 
   return (
     <div>
@@ -158,15 +184,14 @@ function Discover() {
                   />
                   <div className='rounded-xl p-4 absolute top-0 left-0 w-full h-full overflow-hidden hover:bg-black/80 opacity-0 hover:opacity-80 text-white z-[100]'>
                     <div className='flex flex-col justify-center h-full'>
-                      <p className='white-space-normal text-2xl md:text-sm font-bold '>
+                      <p className='white-space-normal text-sm md:text-sm font-bold '>
                         {item.title}
                       </p>
-                      <p className='text-gray-400 white-space-normal text-[13px] md:text-sm text-xs text-left'>
-                        Released | <span className='text-sm'>{item.release_date}</span>
+                      <p className='text-gray-400 white-space-normal text-[13px] hidden md:block  md:text-sm text-xs text-left'>
+                        Released | <span className='text-sm '>{item.release_date}</span>
                       </p>
-
-                      <p>
-                        {like ? (
+                      <p onClick={() => saveShow(item)}>
+                        {likedMovies.some((movie) => movie.id === item.id) ? (
                           <FaHeart className='absolute top-4 right-4 text-gray-300' />
                         ) : (
                           <FaRegHeart className='absolute top-4 right-4 text-gray-300' />
@@ -181,8 +206,6 @@ function Discover() {
               </div>
             ))}
           </div>
-
-
 
           <div className='m-10'>
             <Pagination totalPosts={movies.length} postsPerPage={postsPerPage} paginate={paginate} />
