@@ -40,8 +40,7 @@ function Footer() {
 
           <div data-aos="fade-down" className='flex flex-col mr-20 mb-9'>
             <h3 className='font-bold mb-5'>Help</h3>
-            <Link className='mb-2' to={'/questions'}>Tez-tez soruşulan suallar</Link>
-            <a href="">Yeni Filmlər</a>
+            <Link className='mb-2' to={'/questions'}>Most Asked Questions</Link>
           </div>
 
           <div data-aos="fade-down" className='flex flex-col'>

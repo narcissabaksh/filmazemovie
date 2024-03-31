@@ -5,7 +5,7 @@ import Search from './Search';
 import { UserAuth } from '../../context/AuthContext';
 
 function Navbar() {
-  // Authentication context
+  
   const { user, signOut } = UserAuth();
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ function Navbar() {
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
   const burgerMenuRef = useRef(null);
 
-  // Function to close the burger menu when clicking outside of it
+  //  burger menudan  başqa yerə tıkladıqda burger menunu bağlamaq üçün
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (burgerMenuRef.current && !burgerMenuRef.current.contains(event.target)) {
@@ -90,7 +90,7 @@ function Navbar() {
             ) : (
               <Link to='/signin' className='block text-white py-2 hover:scale-110 transition-all'>Sign In</Link>
             )}
-            {/* Add search bar in mobile version */}
+            
             <div className='md:hidden'>
               <Search className='block text-white border-2 border-white-600 rounded-full pl-4 pr-10 py-2 hover:scale-110 transition-all w-full' />
             </div>

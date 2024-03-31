@@ -8,24 +8,27 @@ import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 function Discover() {
-  const { user } = UserAuth();
-  const movieID = doc(db, 'users', `${user?.email}`);
-  const [likedMovies, setLikedMovies] = useState([]);
-  const [genres, setGenres] = useState([]);
-  const [movies, setMovies] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
-  const [selectedGenre, setSelectedGenre] = useState('');
-  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const { user } = UserAuth(); //  context user datanı UserAuthdan contextdən fetch edirik
+  const movieID = doc(db, 'users', `${user?.email}`); //  Firestore document referencin qurulması
 
+  // State variables using the useState hook
+  const [likedMovies, setLikedMovies] = useState([]); // bəyənilən filmlər üçündü
+  const [genres, setGenres] = useState([]); // janralar üçündü
+  const [movies, setMovies] = useState([]); // fetch olunmuş filmlər
+  const [currentPage, setCurrentPage] = useState(1);  
+  const [postsPerPage, setPostsPerPage] = useState(10); 
+  const [selectedGenre, setSelectedGenre] = useState(''); // seçilmiş janra üçün
+  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false); // burger menu görünümü üçündür
+  const [isMobile, setIsMobile] = useState(false); // mobil olub olmadığını detect etmək üçün
+
+  // ekranın böyük kiçik olmasını yoxlayır
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Adjust the threshold as needed
+      setIsMobile(window.innerWidth < 768); // 768 pixelden aşağı olub olmadığını yoxlayır
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Set initial value
+    handleResize(); // ilkin valuenu təyin et
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -45,33 +48,38 @@ function Discover() {
     fetchData();
   }, []);
 
-  // Fetch movies by selected genre
-  useEffect(() => {
-    const fetchMoviesByGenre = async () => {
-      try {
-        let response;
-        if (selectedGenre) {
-          response = await axios.get(
-            `https://api.themoviedb.org/3/discover/movie?api_key=cd45e063417d7854ad7fef896e88dcfc&language=en&with_genres=${selectedGenre}`
-          );
-        } else {
-          response = await axios.get(
-            'https://api.themoviedb.org/3/discover/movie?api_key=cd45e063417d7854ad7fef896e88dcfc&language=en'
-          );
-        }
-        setMovies(response.data.results);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
+//  filmləri janra seçimlərinə görə fetch et
+useEffect(() => {
+  const fetchMoviesByGenre = async () => {
+    try {
+      let response;
+      if (selectedGenre) {
+        // əgər hərhansısa bir janranı seçmişiksə həmin janraya aid olan filmləri göstər
+        response = await axios.get(
+          `https://api.themoviedb.org/3/discover/movie?api_key=cd45e063417d7854ad7fef896e88dcfc&language=en&with_genres=${selectedGenre}`
+        );
+      } else {
+        // əgər heçbir janra seçilməyibsə onsa bütün filmləri göstər
+        response = await axios.get(
+          'https://api.themoviedb.org/3/discover/movie?api_key=cd45e063417d7854ad7fef896e88dcfc&language=en'
+        );
       }
-    };
+      //  fetch etdiyimiz filmləri setmoviesə fetchlə
+      setMovies(response.data.results);
+    } catch (error) {
+      //  əgər fetch edərkən error olarsa həll et
+      console.error('Error fetching movies:', error);
+    }
+  };
 
-    fetchMoviesByGenre();
-  }, [selectedGenre]);
+  // Call the fetchMoviesByGenre function
+  fetchMoviesByGenre();
+}, [selectedGenre]); // nə vaxt selectedGenre dəyişsə bu effecti işə sal
 
-  // Pagination logic
+  // Pagination 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Toggle burger menu
+  //  burger menu
   const toggleBurgerMenu = () => {
     setIsBurgerMenuOpen(!isBurgerMenuOpen);
   };
@@ -97,11 +105,11 @@ function Discover() {
     }
   };
 
-  // Current page's last movie index
+  
   const indexOfLastPost = currentPage * postsPerPage;
-  // Current page's first movie index
+ 
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  // Get current page's movies
+ 
   const currentPosts = movies.slice(indexOfFirstPost, indexOfLastPost);
 
   return (

@@ -3,15 +3,15 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 
-// Your web app's Firebase configuration
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDGEJcVwRyPFVOsssDqF8sMnEziqkekHFE",
-  authDomain: "filmaze-react.firebaseapp.com",
-  projectId: "filmaze-react",
-  storageBucket: "filmaze-react.appspot.com",
-  messagingSenderId: "810417504882",
-  appId: "1:810417504882:web:1373048299bb54826f38eb"
+  apiKey: "AIzaSyAF91pxgOgaGMrVZb7rq_4ZP1cxORXbZ3s",
+  authDomain: "filmaze-10938.firebaseapp.com",
+  projectId: "filmaze-10938",
+  storageBucket: "filmaze-10938.appspot.com",
+  messagingSenderId: "197382631063",
+  appId: "1:197382631063:web:19ac331727a6341cee03d2"
 };
 
 // Initialize Firebase

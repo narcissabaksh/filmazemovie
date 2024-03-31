@@ -10,21 +10,22 @@ AOS.init();
 
 function SignIn() {
   
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const { user, signIn } = UserAuth();
-  const navigate = useNavigate();
+  const [email, setEmail] = useState(''); 
+  const [password, setPassword] = useState(''); 
+  const [error, setError] = useState(''); 
+  const { user, signIn } = UserAuth(); 
+  const navigate = useNavigate(); 
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(''); // Əvvəlki error mesajlarının silinməsi
     try {
-      await signIn(email, password);
-      navigate('/');
+      await signIn(email, password); // email və şifrə ilə daxil olmaq
+      navigate('/'); // əgər hesaba daxil olunumsa ana səhifəyə keç
     } catch (error) {
       console.log(error);
-      setError(error.message);
+      setError(error.message); // əgər daxil olunmayıbsa error mesajını göstər
     }
   };
  
@@ -44,11 +45,13 @@ function SignIn() {
         
 
         <div className='flex justify-center my-16'>
-          {error ? <p className='p-3 bg-red-800 max-w-[400px] my-2'>{error}</p> : null}
+          
           <form onSubmit={handleSubmit} className=''>
             <div className='text-white my-14'>
               <h2 className='text-3xl justify-center md:text-5xl font-extralight text-center mb-4'>SIGN IN</h2>
             </div> 
+
+            {error ? <p className='p-3 bg-red-800 max-w-[400px] ml-10 my-2'>{error}</p> : null}
 
             <div className="grid grid-col-1 ml-10 md:w-[400px]">
               <label htmlFor="email" className='text-sm text-zinc-400 mb-1 my-2'>E-MAIL ADDRESS</label>

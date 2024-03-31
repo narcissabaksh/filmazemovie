@@ -44,7 +44,7 @@ function Movie({ item }) {
  
         <div className='rounded-xl p-4 absolute top-0 left-0 w-full h-full overflow-hidden hover:bg-black/80 opacity-0 hover:opacity-80 text-white z-[100]'>
           <div className='flex flex-col justify-center h-full'>
-            <p className='white-space-normal md:text-2xl text-sm font-bold'>{item?.title}</p>
+            <p className='white-space-normal md:text-base max-w-[100px] text-sm font-bold'>{item?.title}</p>
             <p className='text-gray-400 hidden md:block white-space-normal text-[13px] md:text-sm  text-xs text-left'>
               Released | <span className='text-sm'>{item?.release_date}</span>
             </p>

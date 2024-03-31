@@ -1,23 +1,27 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import Movie from './Movie';
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md'; 
+import Movie from './Movie'; 
 
-function Row({ title, fetchUrl , rowID}) {
-  const [movies, setMovies] = useState([]);
-  
+function Row({ title, fetchUrl, rowID }) {
+  const [movies, setMovies] = useState([]); // film datalarını saxlamaq üçün 
+
   useEffect(() => {
+    // Komponent qoşulduqda və ya Url dəişdikdə verilmiş urlə əsasən film məlumlarının fetch edilməsi
+    
     axios.get(fetchUrl).then((response) => {
-      setMovies(response.data.results);
+      setMovies(response.data.results); // fetch etdiyimiz filmləri statedə qururuq
     });
-  }, [fetchUrl]);
+  }, [fetchUrl]); // bu array bizə kömək olur ki fetchurl dəişdikdə usEeffect işə düşsün
 
 
-  const slideLeft= () => {
+  // sola çevirmək üçün
+  const slideLeft = () => {
     var slider = document.getElementById('slider' + rowID);
     slider.scrollLeft = slider.scrollLeft - 500;
   };
 
+  // sağa çevirmək üçün
   const slideRight = () => {
     var slider = document.getElementById('slider' + rowID);
     slider.scrollLeft = slider.scrollLeft + 500;
@@ -25,17 +29,23 @@ function Row({ title, fetchUrl , rowID}) {
 
   return (
     <div className='overflow-hidden'>
-      <h2 className='text-white font-bold md:text-xl p-4'>{title}</h2>
       
+      <h2 className='text-white font-bold md:text-xl p-4'>{title}</h2>
+
+      {/* Slider container */}
       <div className='relative flex items-center group'>
+
         
         <MdChevronLeft onClick={slideLeft} className='bg-transparent text-white border-2 border-white-600 absolute left-0 rounded-full opacity-50 hover:opacity-100 cursor-pointer z-10 hidden group-hover:block' size={40}></MdChevronLeft>
-        
-        <div id={'slider' + rowID} className='w-full h-full overflow-x-scroll overflow-hidden whitespace-nowrap scroll-smooth scrollbar-hide relative '>
+
+        {/* Movie slider */}
+        <div id={'slider' + rowID} className='w-full h-full overflow-x-scroll overflow-hidden whitespace-nowrap scroll-smooth scrollbar-hide relative'>
+          {/* filmləri map edip hər birini göstəririk*/}
           {movies.map((item, id) => (
-            <Movie key={id} item={item}/>
+            <Movie key={id} item={item} />
           ))}
         </div>
+
         
         <MdChevronRight onClick={slideRight} className='bg-transparent text-white border-2 border-white-600 absolute right-0 rounded-full opacity-50 hover:opacity-100 cursor-pointer z-10 hidden group-hover:block' size={40}></MdChevronRight>
       </div>
